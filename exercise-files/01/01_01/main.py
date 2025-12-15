@@ -13,8 +13,9 @@ console = Console()
 console.rule("[bold green]Generating Content with Responses[/bold green]")
 
 response = client.responses.create(
-    model="gpt-5-nano",
-    input="Write a one-sentence bedtime story about a unicorn."
+    model="gpt-3.5-turbo",
+    input="Write a two-sentence horror story about a haunted house.", 
+    temperature=0.9,
 )
 
-pprint(response)
+print(response.output_text)
