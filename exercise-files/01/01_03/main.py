@@ -5,7 +5,7 @@ import tempfile
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
-from utils import speech_to_text, speech_to_translation, text_to_speec, save_file
+from utils import speech_to_text, speech_to_translation, text_to_speech, save_file
 
 # Load environment variables
 load_dotenv()
@@ -54,11 +54,15 @@ if submit_button and uploaded_file is not None:
         ) as temp_file:
             temp_file.write(uploaded_file.getvalue())
             temp_file_path = temp_file.name
-            
+        
             print(f"Temporary file created at: {temp_file_path}")
             filename = temp_file_path.split("/")[-1]
             st.success("File processed successfully!")
-           
+            original_text = speech_to_text(temp_file_path)
+            st.markdown("Transcription:")
+            st.audio(temp_file_path)
+            st.markdown(f"<p style='color:#3498db'>{original_text}</p>", unsafe_allow_html=True)
+
             
     st.divider()        
     with st.spinner("Translating..."):  
