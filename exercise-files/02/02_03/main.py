@@ -93,20 +93,26 @@ def main():
 
         # Step 1: send the conversation and available functions to GPT
         message_response = generate_response(user_input)
+        
+
+        # Step 2: Using tools and check if GPT wanted to call a function and generate an extended response
         if message_response.tool_calls is None:
             print("Bot:", message_response.content)
             continue
         else:
             print(message_response)
-
-        # Step 2: Using tools and check if GPT wanted to call a function and generate an extended response
-        call_function(message_response.tool_calls)
+       
         # Step 3: call the function and handle structured output
-
+        call_function(message_response.tool_calls)
+        
         # Step 4: send json and response to GPT to extend conversation with assistant's reply
-
+        extended_response = client.chat.completions.create(
+            model="gpt-3.5-turbo-1106",
+            messages=messages,
+        )
+        messages.append(extended_response.choices[0].message)
         # get and extented response from Assistant powered with AI and Tools
-
+        print("Bot:", extended_response.choices[0].message.content)
 
 
 if __name__ == "__main__":
