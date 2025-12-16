@@ -7,7 +7,7 @@
 **MacOS/Linux**:
 
 ```
-python3 -m venv env
+python3 -m venv .venv
 ```
 
 **Windows**:
@@ -19,7 +19,7 @@ python -m venv env
 ## Activate the virtual environment :
 
 ```
-source env/bin/activate
+source .venv/bin/activate
 ```
 
 ## Installation:

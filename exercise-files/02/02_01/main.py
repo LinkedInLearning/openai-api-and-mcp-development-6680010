@@ -93,7 +93,11 @@ def main():
 
         # Step 1: send the conversation and available functions to GPT
         message_response = generate_response(user_input)
-        print(message_response)
+        if message_response.tool_calls is None:
+            print("Bot:", message_response.content)
+            continue
+        else:
+            print(message_response)
 
         # Step 2: Using tools and check if GPT wanted to call a function and generate an extended response
 
