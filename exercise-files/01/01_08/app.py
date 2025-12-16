@@ -1,5 +1,5 @@
 import streamlit as st
-from handlers import generate_chat_completion, generate_image, tts_to_mp3_file, enable_audio_autoplay
+from handlers import generate_chat_completion, generate_image, moderate_text, enable_audio_autoplay
 from settings import setup_sidebar
 
 st.title("🤖 Multimodel Chatbot App")
@@ -18,6 +18,11 @@ with tab_chat:
     with st.form("chat_form", clear_on_submit=True):
         user_input = st.text_input("Type something")
         send = st.form_submit_button("Send")
+        user_mod = moderate_text(user_input)
+        if user_mod["flagged"]:
+            st.warning("⚠️ Your input was flagged by moderation and cannot be processed.")
+            print(user_mod["categories"])
+            st.stop()
         
     if send and user_input:
         with st.spinner("Thinking..."):
@@ -34,6 +39,11 @@ with tab_image:
     with st.form("image_form", clear_on_submit=True):
         user_input = st.text_input("Type something")
         submit = st.form_submit_button("send")
+        user_mod = moderate_text(user_input)
+        if user_mod["flagged"]:
+            st.warning("⚠️ Your input was flagged by moderation and cannot be processed.")
+            print(user_mod["categories"])
+            st.stop()
         
     if submit and user_input:
         with st.spinner("Generating..."):
