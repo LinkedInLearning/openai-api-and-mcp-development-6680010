@@ -1,8 +1,8 @@
 import streamlit as st
-from handlers import generate_chat_completion, generate_image
+from handlers import generate_chat_completion, generate_image, tts_to_mp3_file, enable_audio_autoplay
 from settings import setup_sidebar
 
-st.title("🤖 Chatbot App")
+st.title("🤖 Multimodel Chatbot App")
 
 setup_sidebar()
 
@@ -27,14 +27,14 @@ with tab_chat:
                 temperature=st.session_state["temperature"],
             )
         st.write(completion)
-
+    
 
 with tab_image:
     with st.form("image_form", clear_on_submit=True):
-        gen = st.form_submit_button("Generate image")
         user_input = st.text_input("Type something")
-
-    if gen and user_input:
+        submit = st.form_submit_button("send")
+        
+    if submit and user_input:
         with st.spinner("Generating..."):
             # Your generate_image() should return either a PIL image, bytes, or base64 -> adapt accordingly
             img = generate_image(user_input, model=st.session_state["image_model"])
