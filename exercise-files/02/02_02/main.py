@@ -100,7 +100,7 @@ def main():
             print(message_response)
 
         # Step 2: Using tools and check if GPT wanted to call a function and generate an extended response
-
+        call_function(message_response.tool_calls)
         # Step 3: call the function and handle structured output
 
         # Step 4: send json and response to GPT to extend conversation with assistant's reply
