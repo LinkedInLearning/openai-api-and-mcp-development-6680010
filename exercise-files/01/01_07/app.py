@@ -27,7 +27,8 @@ with tab_chat:
                 temperature=st.session_state["temperature"],
             )
         st.write(completion)
-    
+        enable_audio_autoplay(completion)
+
 
 with tab_image:
     with st.form("image_form", clear_on_submit=True):
@@ -39,4 +40,5 @@ with tab_image:
             # Your generate_image() should return either a PIL image, bytes, or base64 -> adapt accordingly
             img = generate_image(user_input, model=st.session_state["image_model"])
             st.image(img, caption=user_input, width='content')
+            enable_audio_autoplay(f"Here is an image for: {user_input}")
        

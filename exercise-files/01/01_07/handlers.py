@@ -51,7 +51,7 @@ def tts_to_mp3_file(
     output_dir: str = "tts",
     filename: str | None = None,
     tts_model: str = "gpt-4o-mini-tts",
-    voice: str = "alloy",
+    voice: str = "ash",
 ) -> str:
     if not text.strip():
         raise ValueError("No text to speak.")
@@ -74,6 +74,7 @@ def tts_to_mp3_file(
         voice=voice,
         input=text[:4096],
         response_format="mp3",
+        timeout=5.0,
     ) as response:
         response.stream_to_file(str(output_path))
 

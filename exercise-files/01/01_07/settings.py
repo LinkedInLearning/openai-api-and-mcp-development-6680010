@@ -25,3 +25,4 @@ def setup_sidebar():
         st.session_state["image_model"] = IMAGE_MODELS[image_label]
 
         st.session_state["temperature"] = st.slider("Temperature", 0.0, 1.5, 0.7, 0.1)
+        
