@@ -1,11 +1,13 @@
+import streamlit as st
 import openai
-import json
-from colorama import Fore
 from dotenv import load_dotenv
+from handlers import generate_chat_completion, generate_image,  enable_audio_autoplay, moderate_text, flagged_categories
 from utils import get_current_weather
-
+import json
 
 load_dotenv()
+
+st.title("⛅ Whats the Weather like?")
 
 tools = [
     {
@@ -29,24 +31,33 @@ tools = [
 ]
 
 
+# Constants
 MODEL_ENGINE = "gpt-3.5-turbo"
-messages = [{"role": "system", "content": "You are a helpful assistant"}]
+messages = [{"role": "system", "content": "You are a helpful assistant. you can use tools to help you answer questions. and add emojis to your answers when asked about weather forecast. match the emoji with the weather conditions for a given city"}]
 
 client = openai.OpenAI()
 
 
 def generate_response(user_input):
     messages.append({"role": "user", "content": user_input})
-    response = client.chat.completions.create(
+
+    resp = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
         messages=messages,
         tools=tools,
-        tool_choice="auto",  # auto is default, but we'll be explicit
+        tool_choice="auto",
     )
-    messages.append(
-        response.choices[0].message
-    )  # extend conversation with assistant's reply
-    return  response.choices[0].message
+
+    msg = resp.choices[0].message
+
+    # IMPORTANT: content may be None when tool_calls are present
+    messages.append({
+        "role": msg.role,
+        "content": msg.content or "",
+        "tool_calls": msg.tool_calls,  # keep tool calls if any
+    })
+
+    return msg
 
 
 available_functions = {
@@ -77,43 +88,30 @@ def call_function(tool_calls):
             )  # extend conversation with function response
 
 
-def main():
-    print(
-        Fore.CYAN
-        + "Bot: Hello, I am a helpful assistant. Type 'exit' to quit."
-        + Fore.RESET
-    )
+with st.form("chat_form", clear_on_submit=True):
+    user_input = st.text_input("Type something")
+    send = st.form_submit_button("Send")
+    user_mod = moderate_text(user_input)
+    if user_mod["flagged"]:
+        st.error(
+        f"⚠️ Your message was flagged by moderation: "
+        f"{', '.join(flagged_categories(user_mod['categories']))}"
+        )
+        st.stop()
 
-    while True:
-        user_input = input("You: ")
-
-        if user_input == "exit":
-            print("Goodbye!")
-            break
-
-        # Step 1: send the conversation and available functions to GPT
-        message_response = generate_response(user_input)
-        
-
-        # Step 2: Using tools and check if GPT wanted to call a function and generate an extended response
-        if message_response.tool_calls is None:
-            print("Bot:", message_response.content)
-            continue
-        else:
-            print(message_response)
-       
-        # Step 3: call the function and handle structured output
-        call_function(message_response.tool_calls)
-        
-        # Step 4: send json and response to GPT to extend conversation with assistant's reply
-        extended_response = client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",
+if send and user_input:
+    messages.append({"role": "user", "content": user_input})
+    with st.spinner("Thinking..."): 
+        # Step 1: ask and generate response from LLM
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
             messages=messages,
         )
-        messages.append(extended_response.choices[0].message)
-        # get and extented response from Assistant powered with AI and Tools
-        print("Bot:", extended_response.choices[0].message.content)
+        st.write(completion.choices[0].message.content)
+        
+        # Step 2: check if GPT wanted to call a function and generate an extended response
 
-
-if __name__ == "__main__":
-    main()
+        # Step 3: call the function
+        
+        # Step 4: send json and get a new response from LLM extend conversation with assistant's reply
+       
