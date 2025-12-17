@@ -11,6 +11,7 @@ TEXT_MODELS = {
 
 IMAGE_MODELS = {
     "GPT Image 1 (best quality)": "gpt-image-1",
+    "Dalle-3 (creative)": "dalle-3",
     "GPT Image 1 Mini (cheaper)": "gpt-image-1-mini",
 }
 
