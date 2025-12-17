@@ -15,7 +15,7 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 # -----------------------------------
 def generate_chat_completion(
     prompt: str,
-    model: str = "gpt-4o-mini",
+    model: str = "gpt-3.5-turbo",
     temperature: float = 0.7,
 ) -> str:
     response = client.chat.completions.create(
