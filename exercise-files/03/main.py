@@ -6,6 +6,12 @@ from openai import OpenAI
 
 dotenv.load_dotenv()
 
+
+token = os.environ["GITHUB_TOKEN"]
+endpoint = "https://models.github.ai/inference"
+model = "openai/gpt-4.1-nano"
+
+
 SYSTEM_MESSAGE = "You are a helpful assistant that can answer queries based on your knowledge. If you don't know an answer, say 'I don\n't know'"
 # Get GitHub token from environment variable
 github_token = os.getenv("GITHUB_TOKEN")
@@ -15,7 +21,10 @@ if not github_token:
         "Please set it with: export GITHUB_TOKEN='your_token_here'"
     )
 
-client = OpenAI()
+client = OpenAI(
+    base_url=endpoint,
+    api_key=token,
+)
 
 messages = [{
     "role": "system",
@@ -38,12 +47,22 @@ def main():
 
         try:
             response = client.chat.completions.create(
-                messages=messages,
-                model="gpt-4o-mini", 
-                temperature=1.0,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "",
+                },
+                {
+                    "role": "user",
+                    "content": user_input,
+                }
+            ],
+            temperature=1,
+            top_p=1,
+            model=model
             )
-            # console.print(response)
-            print(Style.BRIGHT + Fore.GREEN + response.choices[0].message.content + Style.RESET_ALL)
+
+            print(Style.BRIGHT + Fore.GREEN + response.choices[0].message.content+ Style.RESET_ALL)
      
         except Exception as e:
             print(e)
