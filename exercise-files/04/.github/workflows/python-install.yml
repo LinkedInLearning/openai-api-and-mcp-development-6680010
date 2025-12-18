@@ -1,29 +1,28 @@
-name: Python Install Check
+name: Python Install & GitHub Models
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
+
+permissions:
+  contents: read
+  models: read
 
 jobs:
   install:
+    name: Install Python dependencies
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+      - run: echo "::notice::✅ Python dependencies installed successfully!"
 
-      - name: Installation complete
-        run: echo "✅ Python dependencies installed successfully!"
+  # add one step here to call the GitHub Models action to download a model
