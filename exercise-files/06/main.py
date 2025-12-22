@@ -78,31 +78,38 @@ Task 2:
 # -------------------------------
 # Developer Agent 1 (Task 1)
 # -------------------------------
-
+dev_agent1 = AssistantAgent("Dev_Agent_1", model_client=model_client, system_message=AGENT1_PROMPT)
 
 # -------------------------------
 # Developer Agent 2 (Task 2)
 # -------------------------------
-
+dev_agent2 = AssistantAgent("Dev_Agent_2", model_client=model_client, system_message=AGENT2_PROMPT)
 # -------------------------------
 # Coordinator / Orchestrator
 # -------------------------------
-
-
+coordinator_agent = AssistantAgent("Coordinator", model_client=model_client, system_message=COORDINATOR_PROMPT)
 # ==========================================================
 # GROUP CHAT SETUP
 # ==========================================================
-
+termination = MaxMessageTermination(10)
+team = RoundRobinGroupChat([coordinator_agent, dev_agent1, dev_agent2], termination_condition=termination)
 
 # ==========================================================
 # START WORKFLOW
 # ==========================================================
-
-
-# 8. Main async function to run the flow
 async def main():
     """Run the multi-agent workflow.""" 
-    pass
+    final_output = await team.run(task=PROJECT_DESCRIPTION)
+    for message in final_output.messages:
+        role = getattr(message, 'role', 'unknown')
+        content = getattr(message, 'content', '')
+        console.print(f"- [{role}] {content}")
+        if "TASK_1_COMPLETE" in content:
+            console.print(f"✅ {content}")
+        if "TASK_2_COMPLETE" in content:
+            console.print(f"✅ {content}")
+        if "FINAL_OUTPUT" in content:
+            console.print(f"✅{content}")
 
 if __name__ == "__main__":
     asyncio.run(main())
