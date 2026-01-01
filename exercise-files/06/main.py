@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from rich.console import Console # type: ignore
 from rich.pretty import pprint
 from colorama import Fore
+from langsmith import traceable
 
 
 load_dotenv()
@@ -91,12 +92,13 @@ coordinator_agent = AssistantAgent("Coordinator", model_client=model_client, sys
 # ==========================================================
 # GROUP CHAT SETUP
 # ==========================================================
-termination = MaxMessageTermination(10)
+termination = MaxMessageTermination(100)
 team = RoundRobinGroupChat([coordinator_agent, dev_agent1, dev_agent2], termination_condition=termination)
 
 # ==========================================================
 # START WORKFLOW
 # ==========================================================
+@traceable
 async def main():
     """Run the multi-agent workflow.""" 
     final_output = await team.run(task=PROJECT_DESCRIPTION)
@@ -106,10 +108,14 @@ async def main():
         console.print(f"- [{role}] {content}")
         if "TASK_1_COMPLETE" in content:
             console.print(f"✅ {content}")
+            return content
         if "TASK_2_COMPLETE" in content:
             console.print(f"✅ {content}")
+            return content
         if "FINAL_OUTPUT" in content:
             console.print(f"✅{content}")
+            return content
+            
 
 if __name__ == "__main__":
     asyncio.run(main())

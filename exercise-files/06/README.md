@@ -102,6 +102,8 @@ For both macOS and Windows, deactivate the virtual environment by running:
 ```sh
 pip3 install -r requirements.txt
 pip3 install -U autogen-agentchat "autogen-ext[openai]"
+pip install "langsmith[openai-agents]"
+
 
 export PYTHONPATH=$PYTHONPATH:/path/to/autogen_agentchat
 ```
@@ -110,6 +112,7 @@ export PYTHONPATH=$PYTHONPATH:/path/to/autogen_agentchat
 ```sh
 pip install -r requirements.txt
 pip install -U "autogen-agentchat" "autogen-ext[openai]"
+pip install "langsmith[openai-agents]"
 ```
 
 ---
