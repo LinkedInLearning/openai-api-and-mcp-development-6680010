@@ -1,7 +1,11 @@
 # OpenAI API and MCP Development
-This is the repository for the LinkedIn Learning course `cOpenAI API and MCP Development`. The full course is available from [LinkedIn Learning][lil-course-url].
+This is the repository for the LinkedIn Learning course `OpenAI API and MCP Development`. The full course is available from [LinkedIn Learning][lil-course-url].
 
 ![course-name-alt-text][lil-thumbnail-url] 
+
+## Course Description
+
+Explore the dynamic field of OpenAI API and MCP development with web trainer and developer Sandy Ludosky, and learn how AI can supercharge GitHub Copilot, orchestrate multi-agent systems, and connect to domain-specific data sources. Get started with GitHub Codespaces and MCP servers. Integrate AI models directly within your workflow, automate code reviews, and enhance applications through rich, context-aware agents. Get hands-on experience with setting permissions using access tokens. Harness AI suggestions for code debugging and refactoring tasks with GitHub Actions. Designed for learners with basic Python programming and web development experience, this course empowers you to navigate the AI ecosystem and apply AI models to practical applications. This course prepares you to develop sophisticated AI-enhanced applications that respond intelligently to user queries and task requests.
 
 _See the readme file in the main branch for updated instructions and information._
 ## Instructions
@@ -22,15 +26,9 @@ To resolve this issue:
     Add changes to git using this command: git add .
 	Commit changes using this command: git commit -m "some message"
 
-## Installing
-1. To use these exercise files, you must have the following installed:
-	- [list of requirements for course]
-2. Clone this repository into your local machine using the terminal (Mac), CMD (Windows), or a GUI tool like SourceTree.
-3. [Course-specific instructions]
-
 
 [0]: # (Replace these placeholder URLs with actual course URLs)
 
-[lil-course-url]: https://www.linkedin.com/learning/
-[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D4E0DAQG0eDHsyOSqTA/learning-public-crop_675_1200/B4EZVdqqdwHUAY-/0/1741033220778?e=2147483647&v=beta&t=FxUDo6FA8W8CiFROwqfZKL_mzQhYx9loYLfjN-LNjgA
+[lil-course-url]: https://www.linkedin.com/learning/openai-api-and-mcp-development
+[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D560DAQH0W1llZa58SQ/learning-public-crop_675_1200/B56ZwwKTPCJQAY-/0/1770334533141?e=2147483647&v=beta&t=ybZyy-MivIGC78uYtyJdAZSQMbqkQad6pJzscvBIePo
 
